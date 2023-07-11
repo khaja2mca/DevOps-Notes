@@ -1,0 +1,287 @@
+URL: https://gitlab.com/wezvaprojects/ansible/myawesomejuly23.git
+
+$ git config --global user.name "ADAM M"
+$ git config --global user.email "scmlearningcentre@gmail.com"
+$ git config --global push.default "simple"
+
+User Workflow
+=============
+$ git clone <remote-repo> <workspace>
+  git clone https://gitlab.com/wezvaprojects/ansible/myawesomejuly23.git test00
+$ git add <filename>
+  git add .
+$ git commit -m "comment"
+$ git log --online -1
+$ git push 
+$ git pull
+$ git status 
+$ git diff <file>
+$ git show <commidID>
+
+$ git reset --soft
+$ git reset --mixed
+$ git reset --hard
+
+$ git revert <commitID>
+$ git checkout <commitID>
+
+$ git branch
+$ git checkout <branch>
+$ git branch <branch>
+
+$ git merge <source> <dest>
+$ git cherry-pick <commitid>
+
+$ git tag -m <comment> -a <Tagname> <commitID>
+
+gitlab.com/<namespace>/
+- user group
+
+Owner: all access, adminster the group/project (rename,delete), create subgroups, projects, users
+Maintainer: create subgroups, projects, add users, merge approvals
+Developer: clone, push/pull
+Reporter: read-only access
+
+
+Roles & Responsibilities
+========================
+* Support Continuous Development for projects - Manage Gitlab, namespaces, groups, projects, branching strategies, developer workflow, merge approvals
+
+Day-Day Tasks
+=============
+* Standup Meeting (Scrum/Kanban)
+* Jira Tickets/MS Teams/Slack/ServiceNow
+* Manage Gitlab groups, Manage gitlab projects, manage branches, approval, merges, webhook
+
+Java Build:
+----------
+$ apt update
+$ apt install -y git
+$ apt install -y openjdk-8-jdk
+$ export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+$ export PATH=/usr/lib/jvm/java-8-openjdk-amd64/bin:$PATH
+$ apt install -y maven
+$ java -version
+$ mvn -version
+
+
+$ git clone https://gitlab.com/scmlearningcentre/mavenbuild.git demobuild 
+$ mvn clean package - Full build
+$ mvn package - Incremental build
+
+Springboot application: 
+$ java -jar <jarfile>
+
+$ sudo cp *.war /opt/wildfly/standalone/deployments
+$ sudo /opt/wildfly/bin/standalone.sh -b 0.0.0.0 -bmanagement 0.0.0.0
+
+$ netstat -an |grep 8080
+$ ps aux | grep java
+
+----NODE PROJECT----
+Build Steps:
+ - there is no compilation
+ - unit test using a framework
+ - create a tar/zip with all the necessary *.js
+
+$ git clone https://gitlab.com/scmlearningcentre/nodebuild.git nodebuild
+$ apt install -y nodejs
+$ node -v
+$ apt install -y npm
+
+Build & Unit test:
+$ npm install mocha --save-dev
+$ npm test -> "mocha --recursive --exit"
+
+Deploy:
+$ npm install --only=production
+$ npm start -> node app.js
+
+
+EC2 server
+==========
+- AMI (OS)
+- Type (Capacity)
+- key (private password)
+- Network (Security Group)
+- Storage 
+
+Mumbai Region -> Default Network -> Default Security Group
+FQDN - Fully Qualified Domain Name
+
+whoami = the user name
+hostname = machine name
+hostname -i = ip address
+free -m = available memory
+df -kh . = available hard disk
+lscpu = available cpu
+cat /etc/os-release = gives the os details
+sudo su = switch the user to root
+
+
+Gitlab
+Github
+AWS
+WhatsApp
+WezvaTech App
+
+Access Key: AKIAWLQIL5DFAUZ2UEHS
+Secret Key: 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
+
+============
+TERRAFORM
+============
+- Prone to errors
+- not scalable
+- not optimized way of using
+- immutable infra
+- not cloud agnostic
+
+IAC:
+ * desired state as a file/code
+ * version the code/file
+ * review & reuse the code/file
+
+$ sudo hostnamectl set-hostname <machinename>
+
+Install through Package:
+ $ curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+ $ sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+ $ sudo apt-get update && sudo apt-get install terraform
+
+Install specific version:
+ $ curl -O https://releases.hashicorp.com/terraform/0.15.2/terraform_0.15.2_linux_amd64.zip https://releases.hashicorp.com/terraform/
+ $ sudo apt install -y unzip
+ $ sudo unzip terraform_0.15.2_linux_amd64.zip -d /usr/local/bin/
+
+------------------TERRAFORM AWS SETUP----------
+1. Passing access/secret key as environment variables
+$ export AWS_ACCESS_KEY_ID=(your access key id)
+$ export AWS_SECRET_ACCESS_KEY=(your secret access key)
+
+2. Passing access/secret key through a credentials file
+Install AWS Cli:
+ $ curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+ $ sudo apt install unzip && unzip awscliv2.zip
+ $ sudo ./aws/install --bin-dir /usr/bin --install-dir /usr/bin/aws-cli --update
+ $ aws --version
+
+Configure AWS Cli with Access/Secret Key
+ $ aws configure
+   - creates ~/.aws/credentials file
+
+HCL
+===
+ - HCL(Hashicorp Language)/ *.tf
+ - blocks { }
+ - every block will have a type & a name
+ - every statement should be in a key = value format
+
+   provider block
+   --------------
+   Syntax:
+   provider "providername" {
+     key = value
+   }
+
+   resource block
+   --------------
+   Syntax:
+   resource "provider_resourcetype" "name" {
+      key = value
+   }
+
+                                
+Create Infrastructure
+---------------------
+$ mkdir -p terraform/basics
+$ cd terraform/basics
+$ vi main.tf
+
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-03a933af70fa97ad2"
+  instance_type = "t2.micro"
+}
+
+Terraform Workflow
+------------------
+$ terraform init
+$ terraform validate
+$ terraform plan [-out planfile]
+  + indicates resource creation
+  - indicates resource deletion
+  +/- indicates resource recreation
+  ~ indicates resource modification
+$ terraform apply [planfile] -auto-approve
+$ terraform show
+$ terraform destroy
+
+INTERPOLATION: PROVIDER_RESOURCETYPE.RESOURCENAME.ATTRIBUTES
+
+Modify Infrastructure
+-------------------------
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+# Specify the EC2 details
+resource "aws_instance" "example" {
+  ami           = "ami-03a933af70fa97ad2"
+  instance_type = "t2.micro"
+}
+
+# Create S3 bucket
+resource "aws_s3_bucket" "example" {
+  # NOTE: S3 bucket names must be unique across _all_ AWS accounts
+  bucket = "wezvatech-adam-demo-s3-july2023"
+}
+
+$ terraform plan
+$ terraform apply -auto-approve
+$ terraform destroy
+$ terraform destroy -target aws_s3_bucket.example
+
+Implicit Dependency
+===================
+
+# Specify the AWS details
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_eip" "ip" {
+  instance = aws_instance.example.id
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c1a7f89451184c8b"
+  instance_type = "t2.micro"
+}
+
+Explicit Dependency
+===================
+provider "aws" {
+  region = "ap-south-1"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-006d3995d3a6b963b"
+  instance_type = "t2.micro"
+  depends_on = [aws_s3_bucket.example]
+}
+
+# Create S3 bucket
+resource "aws_s3_bucket" "example" {
+  bucket = "wezvatech-adam-demo-s3-july2023"
+}
+
+$ terraform destroy -target aws_instance.example
+- deletes both the parent & the dependent child resources if we delete parent
+- deletes only child if we delete child resource
